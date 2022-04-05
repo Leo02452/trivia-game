@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 
 class Login extends Component {
@@ -26,37 +27,42 @@ class Login extends Component {
   render() {
     const { name, email, isButtonDisabled } = this.state;
     return (
-      <form>
-        <label htmlFor="name">
-          Nome:
-          <input
-            type="text"
-            data-testid="input-player-name"
-            id="name"
-            name="name"
-            value={ name }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="email">
-          Email:
-          <input
-            type="text"
-            data-testid="input-gravatar-email"
-            id="email"
-            name="email"
-            value={ email }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <button
-          data-testid="btn-play"
-          type="button"
-          disabled={ isButtonDisabled }
-        >
-          Play
-        </button>
-      </form>
+      <>
+        <form>
+          <label htmlFor="name">
+            Nome:
+            <input
+              type="text"
+              data-testid="input-player-name"
+              id="name"
+              name="name"
+              value={ name }
+              onChange={ this.handleChange }
+            />
+          </label>
+          <label htmlFor="email">
+            Email:
+            <input
+              type="text"
+              data-testid="input-gravatar-email"
+              id="email"
+              name="email"
+              value={ email }
+              onChange={ this.handleChange }
+            />
+          </label>
+          <button
+            data-testid="btn-play"
+            type="button"
+            disabled={ isButtonDisabled }
+          >
+            Play
+          </button>
+        </form>
+        <Link to="/configuracoes">
+          <button type="button" data-testid="btn-settings">Configurações</button>
+        </Link>
+      </>
     );
   }
 }
