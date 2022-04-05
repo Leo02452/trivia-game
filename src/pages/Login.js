@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import addNewPlayer from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -22,6 +24,12 @@ class Login extends Component {
     const isNameValid = name.length > 0;
     const isEmailValid = email.length > 0;
     this.setState({ isButtonDisabled: !(isNameValid && isEmailValid) });
+  }
+
+  handleClick = () => {
+    const { dispatchUser } = this.props;
+    const { name, email } = this.state;
+    dispatchUser(name, email);
   }
 
   render() {
@@ -55,6 +63,7 @@ class Login extends Component {
             data-testid="btn-play"
             type="button"
             disabled={ isButtonDisabled }
+            onClick={ this.handleClick }
           >
             Play
           </button>
@@ -67,8 +76,12 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = ({
-
+const mapDispatchToProps = (dispatch) => ({
+  dispatchUser: (name, email) => dispatch(addNewPlayer(name, email)),
 });
 
-export default Login;
+Login.propTypes = ({
+  dispatchUser: PropTypes.func.isRequired,
+});
+
+export default connect(null, mapDispatchToProps)(Login);

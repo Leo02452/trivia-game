@@ -6,9 +6,14 @@ const INITIAL_STATE = {
 };
 
 function player(state = INITIAL_STATE, action) {
-  switch (action.type) {
-  case 'NEW_ACTION':
-    return { state: action.state };
+  const { name, email, type } = action;
+  switch (type) {
+  case 'ADD_NEW_PLAYER':
+    return {
+      ...state,
+      name,
+      gravatarEmail: email,
+    };
   default:
     return state;
   }
