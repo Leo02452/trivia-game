@@ -1,3 +1,7 @@
-const newAction = (state) => ({ type: 'NEW_ACTION', state });
+const addNewPlayer = (name, email) => ({
+  type: 'ADD_NEW_PLAYER',
+  name,
+  email,
+});
 
-export default newAction;
+export default addNewPlayer;
