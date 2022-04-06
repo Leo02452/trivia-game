@@ -1,3 +1,5 @@
+import { ADD_NEW_PLAYER } from '../actions/index';
+
 const INITIAL_STATE = {
   name: '',
   assertions: 0,
@@ -8,7 +10,7 @@ const INITIAL_STATE = {
 function player(state = INITIAL_STATE, action) {
   const { name, email, type } = action;
   switch (type) {
-  case 'ADD_NEW_PLAYER':
+  case ADD_NEW_PLAYER:
     return {
       ...state,
       name,
