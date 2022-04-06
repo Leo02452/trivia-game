@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import gravatarAPI from '../services/gravatarAPI';
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      url: '',
+    };
+  }
+
+  componentDidMount() {
+    const { email } = this.props;
+    const urlImage = gravatarAPI(email);
+    this.setState({ url: urlImage });
+  }
+
   render() {
-    const { name, score, urlImage } = this.props;
+    const { name, score } = this.props;
+    const { url } = this.state;
     return (
       <header>
         <img
           data-testid="header-profile-picture"
-          src={ urlImage || '' }
+          src={ url }
           alt="Foto de Perfil"
         />
         <p data-testid="header-player-name">{name}</p>
@@ -20,13 +35,13 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  urlImage: state.player.urlAvatar,
+  email: state.player.gravatarEmail,
   name: state.player.name,
   score: state.player.score,
 });
 
 Header.propTypes = ({
-  urlImage: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
 });
