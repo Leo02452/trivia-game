@@ -2,32 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+// import Question from '../components/Question';
 import { fetchQuestions } from '../redux/actions';
 
 class Quiz extends React.Component {
   constructor() {
     super();
     this.state = {
-      question: {},
+      questions: [],
     };
   }
 
   componentDidMount() {
-    const { fetch, token } = this.props;
+    const { fetch, token, questions } = this.props;
     fetch(token);
+    // this.setState({ questions: questions.results });
   }
 
   render() {
-    const { questions } = this.props;
+    const { questions } = this.state;
     console.log(questions);
     return (
       <div>
         <Header />
-        <div>
-          { questions.payload.results.map((quest, index) => (
-            <p key={ index }>{ quest }</p>
-          ))}
-        </div>
+        {/* <Question
+          category={ questions[0].category }
+          questionText={ questions[0].question }
+          correctAnswer={ questions[0].correct_answer }
+          wrongAnswer={ questions[0].incorrect_answers[0] }
+        /> */}
       </div>
     );
   }
@@ -35,7 +38,7 @@ class Quiz extends React.Component {
 
 const mapStateToProps = (state) => ({
   token: state.token,
-  questions: state.trivia,
+  questions: state.trivia.payload,
 });
 
 const mapDispatchToProps = (dispatch) => ({
