@@ -1,11 +1,11 @@
-const INITIAL_STATE = {
-  token: '',
-};
+import { GET_TOKEN } from '../actions';
+
+const INITIAL_STATE = '';
 
 function token(state = INITIAL_STATE, action) {
   switch (action.type) {
-  case 'NEW_ACTION':
-    return { state: action.state };
+  case GET_TOKEN:
+    return action.payload;
   default:
     return state;
   }
