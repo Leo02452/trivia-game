@@ -1,5 +1,3 @@
-import md5 from 'crypto-js/md5';
-
 const GET_TOKEN = 'GET_TOKEN';
 const REQUEST_TOKEN = 'REQUEST_TOKEN';
 const FAILED_REQUEST = 'FAILED_REQUEST';
@@ -34,20 +32,6 @@ const addNewPlayer = (name, email) => ({
   name,
   email,
 });
-
-const addAvatar = (avatar) => ({
-  type: 'ADD_AVATAR',
-  avatar,
-});
-
-export function fetchAvatar(email) {
-  return async (dispatch) => {
-    const hashCreated = md5(email).toString();
-    // console.log(hashCreated);
-    const response = await fetch(`https://www.gravatar.com/avatar/${hashCreated}/`);
-    return dispatch(addAvatar(response.url));
-  };
-}
 
 export {
   GET_TOKEN,

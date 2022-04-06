@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchToken, addNewPlayer, fetchAvatar } from '../redux/actions';
+import { fetchToken, addNewPlayer } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -27,10 +27,9 @@ class Login extends Component {
   }
 
   handleClick = () => {
-    const { dispatchUser, requestToken, getAvatar } = this.props;
+    const { dispatchUser, requestToken } = this.props;
     const { name, email } = this.state;
     requestToken();
-    getAvatar(email);
     dispatchUser(name, email);
   }
 
@@ -83,13 +82,11 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   requestToken: () => dispatch(fetchToken()),
   dispatchUser: (name, email) => dispatch(addNewPlayer(name, email)),
-  getAvatar: (email) => dispatch(fetchAvatar(email)),
 });
 
 Login.propTypes = ({
   requestToken: PropTypes.func.isRequired,
   dispatchUser: PropTypes.func.isRequired,
-  getAvatar: PropTypes.func.isRequired,
 });
 
 export default connect(null, mapDispatchToProps)(Login);
