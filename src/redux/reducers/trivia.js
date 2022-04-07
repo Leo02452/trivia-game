@@ -1,4 +1,4 @@
-import { GET_QUESTIONS } from '../actions';
+import { GET_QUESTIONS, SET_TIMEOUT } from '../actions';
 
 const INITIAL_STATE = {};
 
@@ -8,6 +8,11 @@ function trivia(state = INITIAL_STATE, action) {
     return {
       ...state,
       payload: action.payload,
+    };
+  case SET_TIMEOUT:
+    return {
+      ...state,
+      timeout: true,
     };
   default:
     return state;
