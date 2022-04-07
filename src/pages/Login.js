@@ -26,11 +26,12 @@ class Login extends Component {
     this.setState({ isButtonDisabled: !(isNameValid && isEmailValid) });
   }
 
-  handleClick = () => {
-    const { dispatchUser, requestToken } = this.props;
+  handleClick = async () => {
+    const { dispatchUser, requestToken, history } = this.props;
     const { name, email } = this.state;
-    requestToken();
+    await requestToken();
     dispatchUser(name, email);
+    history.push('/quiz');
   }
 
   render() {
@@ -60,16 +61,14 @@ class Login extends Component {
               onChange={ this.handleChange }
             />
           </label>
-          <Link to="/quiz">
-            <button
-              data-testid="btn-play"
-              type="button"
-              disabled={ isButtonDisabled }
-              onClick={ this.handleClick }
-            >
-              Play
-            </button>
-          </Link>
+          <button
+            data-testid="btn-play"
+            type="button"
+            disabled={ isButtonDisabled }
+            onClick={ this.handleClick }
+          >
+            Play
+          </button>
         </form>
         <Link to="/configuracoes">
           <button type="button" data-testid="btn-settings">Configurações</button>
@@ -87,6 +86,7 @@ const mapDispatchToProps = (dispatch) => ({
 Login.propTypes = ({
   requestToken: PropTypes.func.isRequired,
   dispatchUser: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 });
 
 export default connect(null, mapDispatchToProps)(Login);
