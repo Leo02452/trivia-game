@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchQuestions } from '../redux/actions';
 import Loading from './Loading';
+import '../Question.css';
 
 class Question extends Component {
   constructor() {
@@ -11,6 +12,8 @@ class Question extends Component {
       questions: [],
       index: 0,
       loading: true,
+      correctAlt: '',
+      incorrectAlt: '',
     };
   }
 
@@ -34,13 +37,30 @@ class Question extends Component {
     return array;
   }
 
+  handleAnswerClick = (e) => {
+    e.preventDefault();
+    this.setState({
+      correctAlt: 'CorrectAns',
+      incorrectAlt: 'IncorrectAns',
+    });
+  }
+
   renderRandomQuestions = (object) => {
+    const { correctAlt, incorrectAlt } = this.state;
     const correctAnswer = (
-      <button type="button" data-testid="correct-answer" key="0">
+      <button
+        onClick={ this.handleAnswerClick }
+        type="button"
+        className={ correctAlt }
+        data-testid="correct-answer"
+        key="0"
+      >
         {object.correct_answer}
       </button>);
     const incorrectAnswers = object.incorrect_answers.map((answer, i) => (
       <button
+        onClick={ this.handleAnswerClick }
+        className={ incorrectAlt }
         key={ i + 1 }
         type="button"
         data-testid={ `wrong-answer-${i}` }
@@ -83,7 +103,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 Question.defaultProps = ({
-  questions: [],
+  questions: {},
 });
 
 Question.propTypes = ({
