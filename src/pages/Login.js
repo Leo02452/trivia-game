@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchToken, addNewPlayer } from '../redux/actions';
+import { fetchToken, addNewPlayer, fetchQuestions } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -26,11 +26,14 @@ class Login extends Component {
     this.setState({ isButtonDisabled: !(isNameValid && isEmailValid) });
   }
 
-  handleClick = () => {
-    const { dispatchUser, requestToken } = this.props;
+  handleClick = async () => {
+    const { dispatchUser, requestToken, history } = this.props;
     const { name, email } = this.state;
-    requestToken();
+    await requestToken();
     dispatchUser(name, email);
+    const { fetch, token } = this.props;
+    await fetch(token);
+    history.push('/quiz');
   }
 
   render() {
@@ -60,16 +63,14 @@ class Login extends Component {
               onChange={ this.handleChange }
             />
           </label>
-          <Link to="/quiz">
-            <button
-              data-testid="btn-play"
-              type="button"
-              disabled={ isButtonDisabled }
-              onClick={ this.handleClick }
-            >
-              Play
-            </button>
-          </Link>
+          <button
+            data-testid="btn-play"
+            type="button"
+            disabled={ isButtonDisabled }
+            onClick={ this.handleClick }
+          >
+            Play
+          </button>
         </form>
         <Link to="/configuracoes">
           <button type="button" data-testid="btn-settings">Configurações</button>
@@ -82,11 +83,20 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   requestToken: () => dispatch(fetchToken()),
   dispatchUser: (name, email) => dispatch(addNewPlayer(name, email)),
+  fetch: (token) => dispatch(fetchQuestions(token)),
+});
+
+const mapStateToProps = (state) => ({
+  token: state.token,
+  questions: state.trivia.payload,
 });
 
 Login.propTypes = ({
   requestToken: PropTypes.func.isRequired,
   dispatchUser: PropTypes.func.isRequired,
+  fetch: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 });
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
