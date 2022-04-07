@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchToken, addNewPlayer, fetchQuestions } from '../redux/actions';
+import { fetchToken, addNewPlayer } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -31,8 +31,6 @@ class Login extends Component {
     const { name, email } = this.state;
     await requestToken();
     dispatchUser(name, email);
-    const { fetch, token } = this.props;
-    await fetch(token);
     history.push('/quiz');
   }
 
@@ -83,20 +81,12 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   requestToken: () => dispatch(fetchToken()),
   dispatchUser: (name, email) => dispatch(addNewPlayer(name, email)),
-  fetch: (token) => dispatch(fetchQuestions(token)),
-});
-
-const mapStateToProps = (state) => ({
-  token: state.token,
-  questions: state.trivia.payload,
 });
 
 Login.propTypes = ({
   requestToken: PropTypes.func.isRequired,
   dispatchUser: PropTypes.func.isRequired,
-  fetch: PropTypes.func.isRequired,
-  token: PropTypes.string.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);

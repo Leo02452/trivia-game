@@ -7,7 +7,6 @@ import Loading from './Loading';
 class Question extends Component {
   constructor() {
     super();
-    console.log('constructor');
     this.state = {
       questions: [],
       index: 0,
@@ -17,7 +16,6 @@ class Question extends Component {
 
   componentDidMount() {
     this.fetchAux();
-    console.log('didmount');
   }
 
   fetchAux = async () => {
@@ -27,9 +25,36 @@ class Question extends Component {
     this.setState({ questions: questions.results, loading: false });
   }
 
+  // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
+  shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  renderRandomQuestions = (object) => {
+    const correctAnswer = (
+      <button type="button" data-testid="correct-answer" key="0">
+        {object.correct_answer}
+      </button>);
+    const incorrectAnswers = object.incorrect_answers.map((answer, i) => (
+      <button
+        key={ i + 1 }
+        type="button"
+        data-testid={ `wrong-answer-${i}` }
+      >
+        { answer }
+      </button>));
+
+    const allAnswers = [correctAnswer, ...incorrectAnswers];
+    const shuffledArray = this.shuffleArray(allAnswers);
+    return shuffledArray.map((answer) => answer);
+  }
+
   render() {
     const { questions, index, loading } = this.state;
-    console.log(questions);
     return (
       <div>
         { loading
@@ -39,18 +64,7 @@ class Question extends Component {
               <p data-testid="question-category">{questions[index].category}</p>
               <p data-testid="question-text">{questions[index].question}</p>
               <div data-testid="answer-options">
-                <button type="button" data-testid="correct-answer">
-                  {questions[index].correct_answer}
-                </button>
-                { questions[index].incorrect_answers.map((answer, i) => (
-                  <button
-                    key={ i }
-                    type="button"
-                    data-testid={ `wrong-answer-${i}` }
-                  >
-                    { answer }
-                  </button>
-                )) }
+                { this.renderRandomQuestions(questions[index]) }
               </div>
             </>
           ) }
@@ -68,10 +82,14 @@ const mapDispatchToProps = (dispatch) => ({
   fetch: (token) => dispatch(fetchQuestions(token)),
 });
 
+Question.defaultProps = ({
+  questions: [],
+});
+
 Question.propTypes = ({
   fetch: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
-  questions: PropTypes.objectOf(PropTypes.any).isRequired,
+  questions: PropTypes.objectOf(PropTypes.any),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);
