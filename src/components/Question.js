@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchQuestions } from '../redux/actions';
 import Loading from './Loading';
+import Timer from './Timer';
 import '../Question.css';
 
 class Question extends Component {
@@ -46,14 +47,16 @@ class Question extends Component {
   }
 
   renderRandomQuestions = (object) => {
+    const { isTimeFinished } = this.props;
     const { correctAlt, incorrectAlt } = this.state;
     const correctAnswer = (
       <button
-        onClick={ this.handleAnswerClick }
-        type="button"
-        className={ correctAlt }
-        data-testid="correct-answer"
         key="0"
+        type="button"
+        data-testid="correct-answer"
+        className={ correctAlt }
+        disabled={ isTimeFinished }
+        onClick={ this.handleAnswerClick }
       >
         {object.correct_answer}
       </button>);
@@ -64,6 +67,7 @@ class Question extends Component {
         key={ i + 1 }
         type="button"
         data-testid={ `wrong-answer-${i}` }
+        disabled={ isTimeFinished }
       >
         { answer }
       </button>));
@@ -86,6 +90,7 @@ class Question extends Component {
               <div data-testid="answer-options">
                 { this.renderRandomQuestions(questions[index]) }
               </div>
+              <Timer />
             </>
           ) }
       </div>
@@ -96,6 +101,7 @@ class Question extends Component {
 const mapStateToProps = (state) => ({
   token: state.token,
   questions: state.trivia.payload,
+  isTimeFinished: state.trivia.timeout,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -104,12 +110,14 @@ const mapDispatchToProps = (dispatch) => ({
 
 Question.defaultProps = ({
   questions: {},
+  isTimeFinished: false,
 });
 
 Question.propTypes = ({
   fetch: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   questions: PropTypes.objectOf(PropTypes.any),
+  isTimeFinished: PropTypes.bool,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);
