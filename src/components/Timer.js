@@ -15,6 +15,12 @@ class Timer extends Component {
     this.timer();
   }
 
+  componentDidUpdate() {
+    const { getTimer } = this.props;
+    // const { timer } = this.state;
+    if (getTimer) { getTimer(this.state); }
+  }
+
   componentWillUnmount() {
     clearInterval(this.intervalID);
   }
@@ -45,6 +51,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 Timer.propTypes = ({
   dispatchTimer: PropTypes.func.isRequired,
+  getTimer: PropTypes.func.isRequired,
 });
 
 export default connect(null, mapDispatchToProps)(Timer);

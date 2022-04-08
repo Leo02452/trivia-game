@@ -5,6 +5,7 @@ import './App.css';
 import Login from './pages/Login';
 import Quiz from './pages/Quiz';
 import Configuracoes from './pages/Configuracoes';
+import Ranking from './pages/Ranking';
 
 class App extends Component {
   renderRoutes() {
@@ -14,6 +15,7 @@ class App extends Component {
           <Route path="/quiz" component={ Quiz } />
           <Route path="/" exact component={ Login } />
           <Route path="/configuracoes" component={ Configuracoes } />
+          <Route path="ranking" component={ Ranking } />
         </Switch>
       </main>
     );

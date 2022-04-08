@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchQuestions } from '../redux/actions';
+import { fetchQuestions, scoreAction } from '../redux/actions';
 import Loading from './Loading';
 import Timer from './Timer';
 import '../Question.css';
@@ -22,6 +22,8 @@ class Question extends Component {
     this.fetchAux();
   }
 
+  getTimer = (timer) => timer;
+
   fetchAux = async () => {
     const { fetch, token } = this.props;
     await fetch(token);
@@ -38,12 +40,44 @@ class Question extends Component {
     return array;
   }
 
+  calculatePoints = (difficulty) => {
+    const { score } = this.props;
+    const timer = this.getTimer();
+    console.log(timer);
+    const standardPoint = 10;
+    const hardPoint = 3;
+    const mediumPoint = 2;
+    const easyPoint = 1;
+    let totalScore;
+
+    switch (difficulty) {
+    case 'hard':
+      totalScore = (standardPoint + (timer * hardPoint));
+      break;
+    case 'medium':
+      totalScore = (standardPoint + (timer * mediumPoint));
+      break;
+    case 'easy':
+      totalScore = (standardPoint + (timer * easyPoint));
+      break;
+    default:
+      return 0;
+    }
+    score(Number(totalScore));
+  }
+
   handleAnswerClick = (e) => {
+    const { target: { value, name } } = e;
     e.preventDefault();
+    console.log(value);
     this.setState({
       correctAlt: 'CorrectAns',
       incorrectAlt: 'IncorrectAns',
     });
+
+    if (value === 'correct') {
+      this.calculatePoints(name);
+    }
   }
 
   renderRandomQuestions = (object) => {
@@ -54,6 +88,8 @@ class Question extends Component {
         key="0"
         type="button"
         data-testid="correct-answer"
+        value="correct"
+        name={ object.difficulty }
         className={ correctAlt }
         disabled={ isTimeFinished }
         onClick={ this.handleAnswerClick }
@@ -65,6 +101,7 @@ class Question extends Component {
         onClick={ this.handleAnswerClick }
         className={ incorrectAlt }
         key={ i + 1 }
+        value="incorrect"
         type="button"
         data-testid={ `wrong-answer-${i}` }
         disabled={ isTimeFinished }
@@ -90,7 +127,7 @@ class Question extends Component {
               <div data-testid="answer-options">
                 { this.renderRandomQuestions(questions[index]) }
               </div>
-              <Timer />
+              <Timer getTimer={ this.getTimer } />
             </>
           ) }
       </div>
@@ -102,10 +139,12 @@ const mapStateToProps = (state) => ({
   token: state.token,
   questions: state.trivia.payload,
   isTimeFinished: state.trivia.timeout,
+  score: state.player.score,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetch: (token) => dispatch(fetchQuestions(token)),
+  score: (score) => dispatch(scoreAction(score)),
 });
 
 Question.defaultProps = ({
@@ -118,6 +157,7 @@ Question.propTypes = ({
   token: PropTypes.string.isRequired,
   questions: PropTypes.objectOf(PropTypes.any),
   isTimeFinished: PropTypes.bool,
+  score: PropTypes.func.isRequired,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);

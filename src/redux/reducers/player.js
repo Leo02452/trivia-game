@@ -1,4 +1,4 @@
-import { ADD_NEW_PLAYER } from '../actions/index';
+import { ADD_NEW_PLAYER, SET_SCORE } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
@@ -8,13 +8,18 @@ const INITIAL_STATE = {
 };
 
 function player(state = INITIAL_STATE, action) {
-  const { name, email, type } = action;
+  const { name, email, type, score } = action;
   switch (type) {
   case ADD_NEW_PLAYER:
     return {
       ...state,
       name,
       gravatarEmail: email,
+    };
+  case SET_SCORE:
+    return {
+      ...state,
+      score,
     };
   default:
     return state;
