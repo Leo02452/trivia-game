@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import '../Question.css';
 import { fetchQuestions, scoreAction } from '../redux/actions';
 import Loading from './Loading';
 import Timer from './Timer';
-import '../Question.css';
 
 class Question extends Component {
   constructor() {
@@ -15,6 +15,8 @@ class Question extends Component {
       loading: true,
       correctAlt: '',
       incorrectAlt: '',
+      answerTimer: '',
+      test: false,
     };
   }
 
@@ -22,7 +24,7 @@ class Question extends Component {
     this.fetchAux();
   }
 
-  getTimer = (timer) => timer;
+  getTimer = (timer) => this.setState({ answerTimer: timer });
 
   fetchAux = async () => {
     const { fetch, token } = this.props;
@@ -40,10 +42,8 @@ class Question extends Component {
     return array;
   }
 
-  calculatePoints = (difficulty) => {
+  calculatePoints = async (difficulty, answerTimer) => {
     const { score } = this.props;
-    const timer = this.getTimer();
-    console.log(timer);
     const standardPoint = 10;
     const hardPoint = 3;
     const mediumPoint = 2;
@@ -52,13 +52,16 @@ class Question extends Component {
 
     switch (difficulty) {
     case 'hard':
-      totalScore = (standardPoint + (timer * hardPoint));
+      console.log(answerTimer);
+      totalScore = (standardPoint + (answerTimer * hardPoint));
       break;
     case 'medium':
-      totalScore = (standardPoint + (timer * mediumPoint));
+      console.log(answerTimer);
+      totalScore = (standardPoint + (answerTimer * mediumPoint));
       break;
     case 'easy':
-      totalScore = (standardPoint + (timer * easyPoint));
+      console.log(answerTimer);
+      totalScore = (standardPoint + (answerTimer * easyPoint));
       break;
     default:
       return 0;
@@ -76,7 +79,10 @@ class Question extends Component {
     });
 
     if (value === 'correct') {
-      this.calculatePoints(name);
+      this.setState({ test: true }, async () => {
+        const { answerTimer } = this.state;
+        await this.calculatePoints(name, answerTimer);
+      });
     }
   }
 
@@ -115,7 +121,7 @@ class Question extends Component {
   }
 
   render() {
-    const { questions, index, loading } = this.state;
+    const { questions, index, loading, test } = this.state;
     return (
       <div>
         { loading
@@ -127,7 +133,7 @@ class Question extends Component {
               <div data-testid="answer-options">
                 { this.renderRandomQuestions(questions[index]) }
               </div>
-              <Timer getTimer={ this.getTimer } />
+              <Timer x={ test } getTimer={ this.getTimer } />
             </>
           ) }
       </div>

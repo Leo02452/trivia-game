@@ -15,10 +15,12 @@ class Timer extends Component {
     this.timer();
   }
 
-  componentDidUpdate() {
-    const { getTimer } = this.props;
-    // const { timer } = this.state;
-    if (getTimer) { getTimer(this.state); }
+  componentDidUpdate(prevProps) {
+    const { timer } = this.state;
+    const { x, getTimer } = this.props;
+    if (prevProps.x !== x) {
+      getTimer(timer);
+    }
   }
 
   componentWillUnmount() {
