@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchQuestions, scoreAction, timerFinished } from '../redux/actions';
+import { fetchQuestions, scoreAction } from '../redux/actions';
 import Loading from './Loading';
 import './Question.css';
 
@@ -16,6 +16,7 @@ class Question extends Component {
       correctAlt: '',
       incorrectAlt: '',
       timer: 30,
+      timeout: false,
       isClicked: false,
     };
   }
@@ -31,9 +32,8 @@ class Question extends Component {
       this.setState((prevState) => ({ timer: prevState.timer === 0
         ? 0 : prevState.timer - 1 }), () => {
         const { timer } = this.state;
-        const { dispatchTimer } = this.props;
         if (timer === 0) {
-          dispatchTimer();
+          this.setState({ timeout: true });
           clearInterval(this.intervalID);
         }
       });
@@ -108,6 +108,7 @@ class Question extends Component {
       correctAlt: 'CorrectAns',
       incorrectAlt: 'IncorrectAns',
       isClicked: true,
+      timer: 0,
     });
 
     if (value === 'correct') {
@@ -126,13 +127,26 @@ class Question extends Component {
       console.log('TESTE');
       history.push('/feedback');
     } else {
-      this.setState((prevState) => ({ index: prevState.index + 1 }));
+      this.setState((prevState) => ({
+        index: prevState.index + 1,
+        timer: 30,
+        timeout: false,
+        correctAlt: '',
+        incorrectAlt: '',
+      }), () => {
+        this.handleNextQuestion();
+      });
     }
   }
 
+  handleNextQuestion = () => {
+    const { index, questions } = this.state;
+    this.handleTimer();
+    this.shuffleAlternatives(questions[index]);
+  }
+
   renderAlternatives = () => {
-    const { correctAlt, incorrectAlt, shuffledAlternatives } = this.state;
-    const { timeout } = this.props;
+    const { correctAlt, incorrectAlt, shuffledAlternatives, timeout } = this.state;
     return shuffledAlternatives
       .map((alternative, i) => (
         <button
@@ -194,27 +208,22 @@ class Question extends Component {
 const mapStateToProps = (state) => ({
   token: state.token,
   propsQuestions: state.trivia.payload,
-  timeout: state.trivia.timeout,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchFetchQuestions: (token) => dispatch(fetchQuestions(token)),
   dispatchScore: (score) => dispatch(scoreAction(score)),
-  dispatchTimer: () => dispatch(timerFinished()),
 });
 
 Question.defaultProps = ({
   propsQuestions: {},
-  timeout: false,
 });
 
 Question.propTypes = ({
   dispatchFetchQuestions: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   propsQuestions: PropTypes.objectOf(PropTypes.any),
-  timeout: PropTypes.bool,
   dispatchScore: PropTypes.func.isRequired,
-  dispatchTimer: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
 });
 
