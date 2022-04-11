@@ -5,6 +5,7 @@ const ADD_NEW_PLAYER = 'ADD_NEW_PLAYER';
 const REQUEST_QUESTIONS = 'REQUEST_QUESTIONS';
 const GET_QUESTIONS = 'GET_QUESTIONS';
 const SET_TIMEOUT = 'SET_TIMEOUT';
+const SET_SCORE = 'SET_SCORE';
 
 function getToken(json) {
   return { type: GET_TOKEN, payload: json.token };
@@ -62,6 +63,11 @@ const timerFinished = () => ({
   type: SET_TIMEOUT,
 });
 
+const scoreAction = (score) => ({
+  type: SET_SCORE,
+  score,
+});
+
 export {
   GET_TOKEN,
   REQUEST_TOKEN,
@@ -72,4 +78,6 @@ export {
   GET_QUESTIONS,
   REQUEST_QUESTIONS,
   SET_TIMEOUT,
+  scoreAction,
+  SET_SCORE,
 };

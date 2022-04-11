@@ -1,32 +1,54 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchQuestions } from '../redux/actions';
+import { fetchQuestions, scoreAction, timerFinished } from '../redux/actions';
 import Loading from './Loading';
-import Timer from './Timer';
-import '../Question.css';
+import './Question.css';
+// import Timer from './Timer';
 
 class Question extends Component {
   constructor() {
     super();
     this.state = {
       questions: [],
+      shuffledAlternatives: [],
       index: 0,
       loading: true,
       correctAlt: '',
       incorrectAlt: '',
+      timer: 30,
     };
   }
 
   componentDidMount() {
-    this.fetchAux();
+    this.getQuestions();
+    this.handleTimer();
   }
 
-  fetchAux = async () => {
-    const { fetch, token } = this.props;
-    await fetch(token);
-    const { questions } = this.props;
-    this.setState({ questions: questions.results, loading: false });
+  handleTimer = () => {
+    const oneSecond = 1000;
+    this.intervalID = setInterval(() => {
+      this.setState((prevState) => ({ timer: prevState.timer === 0
+        ? 0 : prevState.timer - 1 }), () => {
+        const { timer } = this.state;
+        const { dispatchTimer } = this.props;
+        if (timer === 0) {
+          dispatchTimer();
+          clearInterval(this.intervalID);
+        }
+      });
+    }, oneSecond);
+  }
+
+  getQuestions = async () => {
+    const { dispatchFetchQuestions, token } = this.props;
+    const { index } = this.state;
+    await dispatchFetchQuestions(token);
+    const { propsQuestions } = this.props;
+    this.setState({ questions: propsQuestions.results, loading: false }, () => {
+      const { questions } = this.state;
+      this.shuffleAlternatives(questions[index]);
+    });
   }
 
   // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
@@ -38,47 +60,93 @@ class Question extends Component {
     return array;
   }
 
+  shuffleAlternatives = (object) => {
+    let alternatives = object.incorrect_answers.map((answer) => ({
+      answer,
+      isCorrectAnswer: false,
+      difficulty: object.difficulty,
+    }));
+
+    alternatives = [...alternatives, {
+      answer: object.correct_answer,
+      isCorrectAnswer: true,
+      difficulty: object.difficulty }];
+
+    const shuffledArray = this.shuffleArray(alternatives);
+    this.setState({ shuffledAlternatives: shuffledArray });
+  }
+
+  calculatePoints = async (difficulty, answerTime) => {
+    const { dispatchScore } = this.props;
+
+    const standardPoint = 10;
+    const hardPoint = 3;
+    const mediumPoint = 2;
+    const easyPoint = 1;
+    let totalScore;
+
+    switch (difficulty) {
+    case 'hard':
+      totalScore = (standardPoint + (answerTime * hardPoint));
+      break;
+    case 'medium':
+      totalScore = (standardPoint + (answerTime * mediumPoint));
+      break;
+    case 'easy':
+      totalScore = (standardPoint + (answerTime * easyPoint));
+      break;
+    default:
+      return 0;
+    }
+    dispatchScore(totalScore);
+  }
+
   handleAnswerClick = (e) => {
     e.preventDefault();
+    const { target: { value, name } } = e;
     this.setState({
       correctAlt: 'CorrectAns',
       incorrectAlt: 'IncorrectAns',
     });
+
+    if (value === 'correct') {
+      const { timer } = this.state;
+      this.calculatePoints(name, timer);
+    }
   }
 
-  renderRandomQuestions = (object) => {
-    const { isTimeFinished } = this.props;
-    const { correctAlt, incorrectAlt } = this.state;
-    const correctAnswer = (
-      <button
-        key="0"
-        type="button"
-        data-testid="correct-answer"
-        className={ correctAlt }
-        disabled={ isTimeFinished }
-        onClick={ this.handleAnswerClick }
-      >
-        {object.correct_answer}
-      </button>);
-    const incorrectAnswers = object.incorrect_answers.map((answer, i) => (
-      <button
-        onClick={ this.handleAnswerClick }
-        className={ incorrectAlt }
-        key={ i + 1 }
-        type="button"
-        data-testid={ `wrong-answer-${i}` }
-        disabled={ isTimeFinished }
-      >
-        { answer }
-      </button>));
-
-    const allAnswers = [correctAnswer, ...incorrectAnswers];
-    const shuffledArray = this.shuffleArray(allAnswers);
-    return shuffledArray.map((answer) => answer);
+  renderAlternatives = () => {
+    const { correctAlt, incorrectAlt, shuffledAlternatives } = this.state;
+    const { timeout } = this.props;
+    return shuffledAlternatives
+      .map((alternative, i) => (
+        <button
+          key={ i }
+          type="button"
+          name={ alternative.difficulty }
+          disabled={ timeout }
+          className={ alternative.isCorrectAnswer
+            ? correctAlt
+            : incorrectAlt }
+          data-testid={ alternative.isCorrectAnswer
+            ? 'correct-answer' : `wrong-answer-${i}` }
+          value={ alternative.isCorrectAnswer
+            ? 'correct' : 'wrong' }
+          onClick={ this.handleAnswerClick }
+        >
+          { alternative.answer }
+        </button>
+      ));
   }
 
   render() {
-    const { questions, index, loading } = this.state;
+    const {
+      questions,
+      index,
+      loading,
+      timer,
+    } = this.state;
+
     return (
       <div>
         { loading
@@ -88,9 +156,9 @@ class Question extends Component {
               <p data-testid="question-category">{questions[index].category}</p>
               <p data-testid="question-text">{questions[index].question}</p>
               <div data-testid="answer-options">
-                { this.renderRandomQuestions(questions[index]) }
+                { this.renderAlternatives() }
               </div>
-              <Timer />
+              <p>{ timer }</p>
             </>
           ) }
       </div>
@@ -100,24 +168,28 @@ class Question extends Component {
 
 const mapStateToProps = (state) => ({
   token: state.token,
-  questions: state.trivia.payload,
-  isTimeFinished: state.trivia.timeout,
+  propsQuestions: state.trivia.payload,
+  timeout: state.trivia.timeout,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetch: (token) => dispatch(fetchQuestions(token)),
+  dispatchFetchQuestions: (token) => dispatch(fetchQuestions(token)),
+  dispatchScore: (score) => dispatch(scoreAction(score)),
+  dispatchTimer: () => dispatch(timerFinished()),
 });
 
 Question.defaultProps = ({
-  questions: {},
-  isTimeFinished: false,
+  propsQuestions: {},
+  timeout: false,
 });
 
 Question.propTypes = ({
-  fetch: PropTypes.func.isRequired,
+  dispatchFetchQuestions: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
-  questions: PropTypes.objectOf(PropTypes.any),
-  isTimeFinished: PropTypes.bool,
+  propsQuestions: PropTypes.objectOf(PropTypes.any),
+  timeout: PropTypes.bool,
+  dispatchScore: PropTypes.func.isRequired,
+  dispatchTimer: PropTypes.func.isRequired,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);
