@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+<<<<<<< HEAD
 import { fetchQuestions, scoreAction, timerFinished } from '../redux/actions';
 import Loading from './Loading';
 // import Timer from './Timer';
 import '../Question.css';
+=======
+import '../Question.css';
+import { fetchQuestions, scoreAction } from '../redux/actions';
+import Loading from './Loading';
+import Timer from './Timer';
+>>>>>>> 3e79abf0957e0ecafc2604a8f00e919f791094a5
 
 class Question extends Component {
   constructor() {
@@ -15,7 +22,12 @@ class Question extends Component {
       loading: true,
       correctAlt: '',
       incorrectAlt: '',
+<<<<<<< HEAD
       timer: 30,
+=======
+      answerTimer: '',
+      test: false,
+>>>>>>> 3e79abf0957e0ecafc2604a8f00e919f791094a5
     };
   }
 
@@ -25,6 +37,7 @@ class Question extends Component {
     this.timer();
   }
 
+<<<<<<< HEAD
   componentWillUnmount() {
     clearInterval(this.intervalID);
   }
@@ -40,6 +53,9 @@ class Question extends Component {
       });
     }, oneSecond);
   }
+=======
+  getTimer = (timer) => this.setState({ answerTimer: timer });
+>>>>>>> 3e79abf0957e0ecafc2604a8f00e919f791094a5
 
   fetchAux = async () => {
     const { fetch, token } = this.props;
@@ -59,10 +75,13 @@ class Question extends Component {
     return array;
   }
 
-  calculatePoints = (difficulty) => {
+  calculatePoints = async (difficulty, answerTimer) => {
     const { score } = this.props;
+<<<<<<< HEAD
     const { timer } = this.state;
     console.log(timer);
+=======
+>>>>>>> 3e79abf0957e0ecafc2604a8f00e919f791094a5
     const standardPoint = 10;
     const hardPoint = 3;
     const mediumPoint = 2;
@@ -71,13 +90,16 @@ class Question extends Component {
 
     switch (difficulty) {
     case 'hard':
-      totalScore = (standardPoint + (timer * hardPoint));
+      console.log(answerTimer);
+      totalScore = (standardPoint + (answerTimer * hardPoint));
       break;
     case 'medium':
-      totalScore = (standardPoint + (timer * mediumPoint));
+      console.log(answerTimer);
+      totalScore = (standardPoint + (answerTimer * mediumPoint));
       break;
     case 'easy':
-      totalScore = (standardPoint + (timer * easyPoint));
+      console.log(answerTimer);
+      totalScore = (standardPoint + (answerTimer * easyPoint));
       break;
     default:
       return 0;
@@ -95,7 +117,10 @@ class Question extends Component {
     });
 
     if (value === 'correct') {
-      this.calculatePoints(name);
+      this.setState({ test: true }, async () => {
+        const { answerTimer } = this.state;
+        await this.calculatePoints(name, answerTimer);
+      });
     }
   }
 
@@ -136,7 +161,11 @@ class Question extends Component {
   }
 
   render() {
+<<<<<<< HEAD
     const { questions, index, loading, timer } = this.state;
+=======
+    const { questions, index, loading, test } = this.state;
+>>>>>>> 3e79abf0957e0ecafc2604a8f00e919f791094a5
     return (
       <div>
         { loading
@@ -150,8 +179,12 @@ class Question extends Component {
                 {/* { question.map((answer) => answer) } */ console.log(questions, 'perguntas')}
                 { questions.map((answer) => answer) }
               </div>
+<<<<<<< HEAD
               <p>{ timer }</p>
               {/* <Timer getTimer={ this.getTimer } /> */}
+=======
+              <Timer x={ test } getTimer={ this.getTimer } />
+>>>>>>> 3e79abf0957e0ecafc2604a8f00e919f791094a5
             </>
           ) }
       </div>
