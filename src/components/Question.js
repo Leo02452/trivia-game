@@ -17,6 +17,7 @@ class Question extends Component {
       correctAlt: '',
       incorrectAlt: '',
       timer: 30,
+      isClicked: false,
     };
   }
 
@@ -107,12 +108,17 @@ class Question extends Component {
     this.setState({
       correctAlt: 'CorrectAns',
       incorrectAlt: 'IncorrectAns',
+      isClicked: true,
     });
 
     if (value === 'correct') {
       const { timer } = this.state;
       this.calculatePoints(name, timer);
     }
+  }
+
+  handleNext = () => {
+    this.setState({ index: 1 });
   }
 
   renderAlternatives = () => {
@@ -145,6 +151,7 @@ class Question extends Component {
       index,
       loading,
       timer,
+      isClicked,
     } = this.state;
 
     return (
@@ -161,6 +168,15 @@ class Question extends Component {
               <p>{ timer }</p>
             </>
           ) }
+        {isClicked && (
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={ this.handleNext }
+          >
+            Next
+          </button>
+        )}
       </div>
     );
   }
