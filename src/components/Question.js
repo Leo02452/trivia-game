@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchQuestions, scoreAction } from '../redux/actions';
+import { fetchQuestions, scoreAction, timerFinished } from '../redux/actions';
 import Loading from './Loading';
-import Timer from './Timer';
+// import Timer from './Timer';
 import '../Question.css';
 
 class Question extends Component {
@@ -15,20 +15,39 @@ class Question extends Component {
       loading: true,
       correctAlt: '',
       incorrectAlt: '',
+      timer: 30,
     };
   }
 
   componentDidMount() {
     this.fetchAux();
+    // this.renderRandomQuestions();
+    this.timer();
   }
 
-  getTimer = (timer) => timer;
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
+  }
+
+  timer = () => {
+    const oneSecond = 1000;
+    this.intervalID = setInterval(() => {
+      this.setState((prevState) => ({ timer: prevState.timer === 0
+        ? 0 : prevState.timer - 1 }), () => {
+        const { timer } = this.state;
+        const { dispatchTimer } = this.props;
+        if (timer === 0) { dispatchTimer(); }
+      });
+    }, oneSecond);
+  }
 
   fetchAux = async () => {
     const { fetch, token } = this.props;
+    const { index } = this.state;
     await fetch(token);
     const { questions } = this.props;
-    this.setState({ questions: questions.results, loading: false });
+    this.setState({ loading: false });
+    this.renderRandomQuestions(questions.results[index]);
   }
 
   // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
@@ -42,7 +61,7 @@ class Question extends Component {
 
   calculatePoints = (difficulty) => {
     const { score } = this.props;
-    const timer = this.getTimer();
+    const { timer } = this.state;
     console.log(timer);
     const standardPoint = 10;
     const hardPoint = 3;
@@ -111,11 +130,13 @@ class Question extends Component {
 
     const allAnswers = [correctAnswer, ...incorrectAnswers];
     const shuffledArray = this.shuffleArray(allAnswers);
-    return shuffledArray.map((answer) => answer);
+    // return shuffledArray.map((answer) => answer);
+    console.log(shuffledArray, 'shuffled array');
+    this.setState({ questions: shuffledArray });
   }
 
   render() {
-    const { questions, index, loading } = this.state;
+    const { questions, index, loading, timer } = this.state;
     return (
       <div>
         { loading
@@ -125,9 +146,12 @@ class Question extends Component {
               <p data-testid="question-category">{questions[index].category}</p>
               <p data-testid="question-text">{questions[index].question}</p>
               <div data-testid="answer-options">
-                { this.renderRandomQuestions(questions[index]) }
+                {/* { this.renderRandomQuestions(questions[index]) } */}
+                {/* { question.map((answer) => answer) } */ console.log(questions, 'perguntas')}
+                { questions.map((answer) => answer) }
               </div>
-              <Timer getTimer={ this.getTimer } />
+              <p>{ timer }</p>
+              {/* <Timer getTimer={ this.getTimer } /> */}
             </>
           ) }
       </div>
@@ -145,6 +169,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   fetch: (token) => dispatch(fetchQuestions(token)),
   score: (score) => dispatch(scoreAction(score)),
+  dispatchTimer: () => dispatch(timerFinished()),
 });
 
 Question.defaultProps = ({
@@ -158,6 +183,7 @@ Question.propTypes = ({
   questions: PropTypes.objectOf(PropTypes.any),
   isTimeFinished: PropTypes.bool,
   score: PropTypes.func.isRequired,
+  dispatchTimer: PropTypes.func.isRequired,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);
