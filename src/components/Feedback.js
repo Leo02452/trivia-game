@@ -9,6 +9,7 @@ class Feedback extends Component {
       <main>
         <Header />
         <section>
+          <p data-testid="feedback-text">OI</p>
           {/* Abaixo Desafio 15 */}
           <Link to="/">
             <button
