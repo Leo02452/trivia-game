@@ -10,36 +10,35 @@ class Feedback extends Component {
     const auxNumber = 3;
     return (
       <div>
+        <Header />
         <main>
-          <Header />
+          {/* Abaixo Desafio 13 */}
+          <h1
+            data-testid="feedback-text"
+          >
+            {assertions >= auxNumber ? 'Well Done!' : 'Could be better...'}
+          </h1>
+          <section>
+            {/* Abaixo Desafio 15 */}
+            <Link to="/">
+              <button
+                type="button"
+                data-testid="btn-play-again"
+              >
+                Play Again
+              </button>
+            </Link>
+            {/* Abaixo Desafio 16 */}
+            <Link to="/ranking">
+              <button
+                type="button"
+                data-testid="btn-ranking"
+              >
+                Ranking
+              </button>
+            </Link>
+          </section>
         </main>
-        {/* Abaixo Desafio 13 */}
-        <h1
-          data-testid="feedback-text"
-        >
-          {assertions >= auxNumber ? 'Well Done!' : 'Could be better...'}
-        </h1>
-        <section>
-          <p data-testid="feedback-text">OI</p>
-          {/* Abaixo Desafio 15 */}
-          <Link to="/">
-            <button
-              type="button"
-              data-testid="btn-play-again"
-            >
-              Play Again
-            </button>
-          </Link>
-          {/* Abaixo Desafio 16 */}
-          <Link to="/ranking">
-            <button
-              type="button"
-              data-testid="btn-ranking"
-            >
-              Ranking
-            </button>
-          </Link>
-        </section>
       </div>
     );
   }
