@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchQuestions, scoreAction, timerFinished } from '../redux/actions';
 import Loading from './Loading';
 import './Question.css';
-// import Timer from './Timer';
 
 class Question extends Component {
   constructor() {
@@ -118,7 +117,17 @@ class Question extends Component {
   }
 
   handleNext = () => {
-    this.setState({ index: 1 });
+    const maxQuestion = 4;
+    const { index } = this.state;
+    const { history } = this.props;
+    console.log(this.props);
+    console.log(history);
+    if (index === maxQuestion) {
+      console.log('TESTE');
+      history.push('/feedback');
+    } else {
+      this.setState((prevState) => ({ index: prevState.index + 1 }));
+    }
   }
 
   renderAlternatives = () => {
@@ -206,6 +215,7 @@ Question.propTypes = ({
   timeout: PropTypes.bool,
   dispatchScore: PropTypes.func.isRequired,
   dispatchTimer: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);
