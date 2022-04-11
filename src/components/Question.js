@@ -115,18 +115,37 @@ class Question extends Component {
     }
   }
 
+  renderAlternatives = () => {
+    const { correctAlt, incorrectAlt, shuffledAlternatives } = this.state;
+    const { timeout } = this.props;
+    return shuffledAlternatives
+      .map((alternative, i) => (
+        <button
+          key={ i }
+          type="button"
+          name={ alternative.difficulty }
+          disabled={ timeout }
+          className={ alternative.isCorrectAnswer
+            ? correctAlt
+            : incorrectAlt }
+          data-testid={ alternative.isCorrectAnswer
+            ? 'correct-answer' : `wrong-answer-${i}` }
+          value={ alternative.isCorrectAnswer
+            ? 'correct' : 'wrong' }
+          onClick={ this.handleAnswerClick }
+        >
+          { alternative.answer }
+        </button>
+      ));
+  }
+
   render() {
     const {
       questions,
       index,
       loading,
       timer,
-      shuffledAlternatives,
-      correctAlt,
-      incorrectAlt,
     } = this.state;
-
-    const { timeout } = this.props;
 
     return (
       <div>
@@ -137,25 +156,7 @@ class Question extends Component {
               <p data-testid="question-category">{questions[index].category}</p>
               <p data-testid="question-text">{questions[index].question}</p>
               <div data-testid="answer-options">
-                { shuffledAlternatives
-                  .map((alternative, i) => (
-                    <button
-                      key={ i }
-                      type="button"
-                      name={ alternative.difficulty }
-                      disabled={ timeout }
-                      className={ alternative.isCorrectAnswer
-                        ? correctAlt
-                        : incorrectAlt }
-                      data-testid={ alternative.isCorrectAnswer
-                        ? 'correct-answer' : `wrong-answer-${i}` }
-                      value={ alternative.isCorrectAnswer
-                        ? 'correct-answer' : 'wrong-answer' }
-                      onClick={ this.handleAnswerClick }
-                    >
-                      { alternative }
-                    </button>
-                  ))}
+                { this.renderAlternatives() }
               </div>
               <p>{ timer }</p>
             </>
