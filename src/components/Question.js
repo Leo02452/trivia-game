@@ -144,7 +144,9 @@ class Question extends Component {
                       type="button"
                       name={ alternative.difficulty }
                       disabled={ timeout }
-                      className={ alternative.isCorrectAnswer ? correctAlt : incorrectAlt }
+                      className={ alternative.isCorrectAnswer
+                        ? correctAlt
+                        : incorrectAlt }
                       data-testid={ alternative.isCorrectAnswer
                         ? 'correct-answer' : `wrong-answer-${i}` }
                       value={ alternative.isCorrectAnswer
