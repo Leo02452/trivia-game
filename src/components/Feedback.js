@@ -20,6 +20,7 @@ class Feedback extends Component {
           {assertions >= auxNumber ? 'Well Done!' : 'Could be better...'}
         </h1>
         <section>
+          <p data-testid="feedback-text">OI</p>
           {/* Abaixo Desafio 15 */}
           <Link to="/">
             <button
