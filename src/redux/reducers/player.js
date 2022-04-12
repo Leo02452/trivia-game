@@ -1,4 +1,4 @@
-import { ADD_NEW_PLAYER, SET_SCORE } from '../actions/index';
+import { ADD_NEW_PLAYER, SET_SCORE, RESET_SCORE } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
@@ -21,6 +21,12 @@ function player(state = INITIAL_STATE, action) {
       ...state,
       score: state.score + score,
       assertions: state.assertions + 1,
+    };
+  case RESET_SCORE:
+    return {
+      ...state,
+      score: 0,
+      assertions: 0,
     };
   default:
     return state;

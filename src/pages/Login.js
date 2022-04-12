@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchToken, addNewPlayer } from '../redux/actions';
+import { fetchToken, addNewPlayer, resetScore } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -27,10 +27,11 @@ class Login extends Component {
   }
 
   handleClick = async () => {
-    const { dispatchUser, requestToken, history } = this.props;
+    const { dispatchUser, requestToken, history, dispatchResetScore } = this.props;
     const { name, email } = this.state;
     await requestToken();
     dispatchUser(name, email);
+    dispatchResetScore();
     history.push('/quiz');
   }
 
@@ -81,12 +82,14 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   requestToken: () => dispatch(fetchToken()),
   dispatchUser: (name, email) => dispatch(addNewPlayer(name, email)),
+  dispatchResetScore: () => dispatch(resetScore()),
 });
 
 Login.propTypes = ({
   requestToken: PropTypes.func.isRequired,
   dispatchUser: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  dispatchResetScore: PropTypes.func.isRequired,
 });
 
 export default connect(null, mapDispatchToProps)(Login);
