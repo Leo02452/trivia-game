@@ -12,17 +12,14 @@ class Feedback extends Component {
       <div>
         <Header />
         <main>
-          {/* Abaixo Desafio 13 */}
           <h1
             data-testid="feedback-text"
           >
             {assertions >= auxNumber ? 'Well Done!' : 'Could be better...'}
           </h1>
-          {/* Abaixo Desafio 14 */}
           <p data-testid="feedback-total-score">{score}</p>
           <p data-testid="feedback-total-question">{assertions}</p>
           <section>
-            {/* Abaixo Desafio 15 */}
             <Link to="/">
               <button
                 type="button"
@@ -31,7 +28,6 @@ class Feedback extends Component {
                 Play Again
               </button>
             </Link>
-            {/* Abaixo Desafio 16 */}
             <Link to="/ranking">
               <button
                 type="button"
