@@ -38,42 +38,40 @@ class Login extends Component {
   render() {
     const { name, email, isButtonDisabled } = this.state;
     return (
-      <>
-        <form className="form">
-          <label htmlFor="name">
-            Nome:
-            <input
-              className="input-login"
-              type="text"
-              data-testid="input-player-name"
-              id="name"
-              name="name"
-              value={ name }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="email">
-            Email:
-            <input
-              className="input-login"
-              type="text"
-              data-testid="input-gravatar-email"
-              id="email"
-              name="email"
-              value={ email }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <button
-            className="btn-play"
-            data-testid="btn-play"
-            type="button"
-            disabled={ isButtonDisabled }
-            onClick={ this.handleClick }
-          >
-            Play
-          </button>
-        </form>
+      <form className="form">
+        <label htmlFor="name">
+          <input
+            placeholder="Name"
+            className="input-login"
+            type="text"
+            data-testid="input-player-name"
+            id="name"
+            name="name"
+            value={ name }
+            onChange={ this.handleChange }
+          />
+        </label>
+        <label htmlFor="email">
+          <input
+            placeholder="Email"
+            className="input-login"
+            type="text"
+            data-testid="input-gravatar-email"
+            id="email"
+            name="email"
+            value={ email }
+            onChange={ this.handleChange }
+          />
+        </label>
+        <button
+          className="btn-play"
+          data-testid="btn-play"
+          type="button"
+          disabled={ isButtonDisabled }
+          onClick={ this.handleClick }
+        >
+          Play
+        </button>
         <Link to="/configuracoes">
           <button
             className="btn-config"
@@ -83,7 +81,7 @@ class Login extends Component {
             Configurações
           </button>
         </Link>
-      </>
+      </form>
     );
   }
 }

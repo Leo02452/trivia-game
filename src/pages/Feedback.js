@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Header from './Header';
+import Header from '../components/Header';
 
 class Feedback extends Component {
   render() {
