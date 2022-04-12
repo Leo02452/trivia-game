@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchQuestions, scoreAction } from '../redux/actions';
 import Loading from './Loading';
+import gravatarAPI from '../services/gravatarAPI';
 import './Question.css';
 
 class Question extends Component {
@@ -18,6 +19,7 @@ class Question extends Component {
       timer: 30,
       timeout: false,
       isClicked: false,
+      score: 0,
     };
   }
 
@@ -98,6 +100,7 @@ class Question extends Component {
     default:
       return 0;
     }
+    this.setState((prevState) => ({ score: prevState.score + totalScore }));
     dispatchScore(totalScore);
   }
 
@@ -117,14 +120,27 @@ class Question extends Component {
     }
   }
 
-  handleNext = () => {
+  handleRanking = () => {
+    const urlImage = gravatarAPI();
+    const { score } = this.state;
+    const { name } = this.props;
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = {
+      name,
+      score,
+      picture: urlImage,
+    };
+    users = [...users, user];
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
+  handleNextButton = () => {
     const maxQuestion = 4;
     const { index } = this.state;
     const { history } = this.props;
-    console.log(this.props);
-    console.log(history);
     if (index === maxQuestion) {
-      console.log('TESTE');
+      this.handleRanking();
       history.push('/feedback');
     } else {
       this.setState((prevState) => ({
@@ -195,7 +211,7 @@ class Question extends Component {
           <button
             type="button"
             data-testid="btn-next"
-            onClick={ this.handleNext }
+            onClick={ this.handleNextButton }
           >
             Next
           </button>
@@ -208,6 +224,7 @@ class Question extends Component {
 const mapStateToProps = (state) => ({
   token: state.token,
   propsQuestions: state.trivia.payload,
+  name: state.player.name,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -225,6 +242,7 @@ Question.propTypes = ({
   propsQuestions: PropTypes.objectOf(PropTypes.any),
   dispatchScore: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  name: PropTypes.string.isRequired,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);

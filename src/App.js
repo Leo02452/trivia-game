@@ -5,20 +5,18 @@ import Login from './pages/Login';
 import Quiz from './pages/Quiz';
 import Configuracoes from './pages/Configuracoes';
 import Ranking from './pages/Ranking';
-import Feedback from './components/Feedback';
+import Feedback from './pages/Feedback';
 
 class App extends Component {
   render() {
     return (
-      <main className="main">
-        <Switch>
-          <Route path="/quiz" component={ Quiz } />
-          <Route path="/" exact component={ Login } />
-          <Route path="/configuracoes" component={ Configuracoes } />
-          <Route path="/ranking" component={ Ranking } />
-          <Route path="/feedback" component={ Feedback } />
-        </Switch>
-      </main>
+      <Switch>
+        <Route path="/quiz" component={ Quiz } />
+        <Route path="/" exact component={ Login } />
+        <Route path="/configuracoes" component={ Configuracoes } />
+        <Route path="/ranking" component={ Ranking } />
+        <Route path="/feedback" component={ Feedback } />
+      </Switch>
     );
   }
 }

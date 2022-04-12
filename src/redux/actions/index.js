@@ -6,6 +6,7 @@ const REQUEST_QUESTIONS = 'REQUEST_QUESTIONS';
 const GET_QUESTIONS = 'GET_QUESTIONS';
 const SET_TIMEOUT = 'SET_TIMEOUT';
 const SET_SCORE = 'SET_SCORE';
+const RESET_SCORE = 'RESET_SCORE';
 
 function getToken(json) {
   return { type: GET_TOKEN, payload: json.token };
@@ -68,6 +69,10 @@ const scoreAction = (score) => ({
   score,
 });
 
+const resetScore = () => ({
+  type: RESET_SCORE,
+});
+
 export {
   GET_TOKEN,
   REQUEST_TOKEN,
@@ -80,4 +85,6 @@ export {
   SET_TIMEOUT,
   scoreAction,
   SET_SCORE,
+  RESET_SCORE,
+  resetScore,
 };
