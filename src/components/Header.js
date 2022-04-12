@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import gravatarAPI from '../services/gravatarAPI';
+import './Header.css';
 
 class Header extends Component {
   constructor(props) {

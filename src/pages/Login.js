@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchToken, addNewPlayer } from '../redux/actions';
+import './Login.css';
 
 class Login extends Component {
   constructor() {
@@ -38,10 +39,11 @@ class Login extends Component {
     const { name, email, isButtonDisabled } = this.state;
     return (
       <>
-        <form>
+        <form className="form">
           <label htmlFor="name">
             Nome:
             <input
+              className="input-login"
               type="text"
               data-testid="input-player-name"
               id="name"
@@ -53,6 +55,7 @@ class Login extends Component {
           <label htmlFor="email">
             Email:
             <input
+              className="input-login"
               type="text"
               data-testid="input-gravatar-email"
               id="email"
@@ -62,6 +65,7 @@ class Login extends Component {
             />
           </label>
           <button
+            className="btn-play"
             data-testid="btn-play"
             type="button"
             disabled={ isButtonDisabled }
@@ -71,7 +75,13 @@ class Login extends Component {
           </button>
         </form>
         <Link to="/configuracoes">
-          <button type="button" data-testid="btn-settings">Configurações</button>
+          <button
+            className="btn-config"
+            type="button"
+            data-testid="btn-settings"
+          >
+            Configurações
+          </button>
         </Link>
       </>
     );
