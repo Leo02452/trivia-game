@@ -17,7 +17,7 @@
 }
 
 .questions-container {
-  color: black;
+  color: #f5e3e0;
   display: flex;
   border-radius: 5%;
   text-align: center;
@@ -25,7 +25,7 @@
   height: 400px;
   justify-content: space-around;
   flex-direction: column;
-  background-color: var(--purple-white);
+  background-color: #574ae2;
   /* font-family: 'Poppins', sans-serif; */
   font-family: 'Ubuntu', sans-serif;
 }
@@ -59,7 +59,8 @@
 }
 
 .btn-next {
-  width: 80%;
+  width: 60%;
+  height: 40px;
   border-radius: 3px;
   font-size: 20px;
   background-color: #2ecc71;

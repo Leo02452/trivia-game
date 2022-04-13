@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import './Feedback.css';
+import tristeza from '../assets/tristeza.gif';
+import happy from '../assets/happy.gif';
 
 class Feedback extends Component {
   render() {
@@ -17,8 +19,11 @@ class Feedback extends Component {
             <h1
               data-testid="feedback-text"
             >
-              {assertions >= auxNumber ? 'Well Done! 😀' : 'Could be better... 😓'}
+              {assertions >= auxNumber ? 'Well Done!' : 'Could be better...'}
             </h1>
+            {assertions >= auxNumber
+              ? <img className="img-feedback" alt="" src={ happy } />
+              : <img className="img-feedback" alt="" src={ tristeza } />}
             <p data-testid="feedback-total-score">{`⭐ Score: ${score}`}</p>
             <p data-testid="feedback-total-question">{`✅ Corrects: ${assertions}`}</p>
           </div>

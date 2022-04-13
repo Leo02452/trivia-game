@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './Ranking.css';
 
 class Ranking extends Component {
   constructor(props) {
@@ -18,35 +19,42 @@ class Ranking extends Component {
   render() {
     const { users } = this.state;
     return (
-      <div>
-        <h1 data-testid="ranking-title">Ranking</h1>
-        { users.map((user, index) => (
-          <div key={ index }>
-            <span
-              data-testid={ `player-name${index}` }
-            >
-              { user.name }
-            </span>
-            <span
-              data-testid={ `player-score${index}` }
-            >
-              { user.score }
-            </span>
-            <img src={ user.picture } alt={ `Foto de ${user.score}` } />
-          </div>
-        )) }
+      <main className="ranking-page">
+        <h1 data-testid="ranking-title" className="ranking-title">Ranking</h1>
+        <section className="ranking-container">
+          { users.map((user, index) => (
+            <div key={ index } className="user-wrapper">
+              <img
+                src={ user.picture }
+                alt={ `Foto de ${user.score}` }
+                className="header-profile"
+              />
+              <span
+                data-testid={ `player-name${index}` }
+                className="user-name"
+              >
+                { user.name }
+              </span>
+              <span
+                data-testid={ `player-score${index}` }
+                className="user-score"
+              >
+                {`⭐ ${user.score}`}
+              </span>
+            </div>
+          )) }
+        </section>
         <Link to="/">
           <button
             data-testid="btn-go-home"
             type="button"
+            className="go-home-button"
           >
             Home
           </button>
         </Link>
-      </div>
-
+      </main>
     );
   }
 }
-
 export default Ranking;

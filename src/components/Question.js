@@ -6,6 +6,7 @@ import Loading from './Loading';
 import gravatarAPI from '../services/gravatarAPI';
 import './Question.css';
 import timerImg from '../assets/timerImg.svg';
+import he from 'he';
 
 class Question extends Component {
   constructor() {
@@ -180,7 +181,7 @@ class Question extends Component {
             ? 'correct' : 'wrong' }
           onClick={ this.handleAnswerClick }
         >
-          { alternative.answer }
+          { he.decode(alternative.answer) }
         </button>
       ));
   }
@@ -210,7 +211,7 @@ class Question extends Component {
                   className="question"
                   data-testid="question-text"
                 >
-                  {questions[index].question}
+                  {he.decode(questions[index].question)}
                 </p>
                 <div className="alternatives" data-testid="answer-options">
                   { this.renderAlternatives() }

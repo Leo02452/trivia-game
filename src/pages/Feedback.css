@@ -1,18 +1,34 @@
 .main-feedback {
   width: 100%;
-  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   color: white;
   margin-top: 50px;
-  background-color:var(--purple-white);
+  /* background-color:var(--purple-white); */
   justify-content: space-around;
   text-align: center;
   /* font-family: 'Courier New', Courier, monospace; */
   font-family: 'Ubuntu', sans-serif;
 } 
+
+.feedback-container {
+  width: 100%;
+  height: 60vh;
+  margin-bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.btn-container {
+  width: 30%;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+}
 
 
 .btn-feedback {
@@ -31,4 +47,8 @@
   background-size: 200% auto;
   -webkit-animation: pulse 2s infinite;
   animation: pulse512 1.5s infinite;
+ }
+
+ .img-feedback {
+   width: 20%;
  }
