@@ -1,45 +1,75 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
-.main{
+.main-login{
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
 }
 
+.logo {
+  width: 20%;
+}
+
 .form {
  border-radius: 2%;
- background-color: red;
  display: flex; 
- width: 300px;
- height: 350px;
+ height: 450px;
  flex-direction: column;
  justify-content: space-evenly;
  align-items: center;
  text-align: center;
+ padding-bottom: 20px;
+ font-family: 'Ubuntu', sans-serif;
 }
 
-.btn-play {
-  position: relative;
-  padding: 5px 20px;
-  margin: 0px 5px 5px 0px;
-  float: left;
-  border-radius: 3px;
-  font-size: 20px;
-  color: #FFF;
-  text-decoration: none;
-  background-color: #2ecc71;
-  border: none;
-  border-bottom: 5px solid #27ae60;
-  text-shadow: 0px -2px #27ae60;
-  -webkit-transition: all 0.1s;
-  transition: all 0.1s;
+.input-login {
+  background-color: var(--blue-dark);
+  border: 0px;
+  border-bottom: 2px solid white;
+}
+
+
+.input-login:focus {
+  background-color: var(--blue-dark);
+  border: 0px;
+  border-bottom: 2px solid white;
+}
+
+
+.btn-play, .btn-config {
+ border: none;
+ color: #fff;
+ background-image: linear-gradient(30deg, #0400ff, #4ce3f7);
+ border-radius: 20px;
+ background-size: 100% auto;
+ font-family: inherit;
+ font-size: 17px;
+ padding: 0.6em 1.5em;
+}
+
+.btn-play, .btn-config:hover {
+ background-position: right center;
+ background-size: 200% auto;
+ -webkit-animation: pulse 2s infinite;
+ animation: pulse512 1.5s infinite;
+}
+
+@keyframes pulse512 {
+ 0% {
+  box-shadow: 0 0 0 0 #05bada66;
  }
+
+ 70% {
+  box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+ }
+
+ 100% {
+  box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+ }
+}
+
  
 .input-login {
   padding: 5px;

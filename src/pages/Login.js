@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import { fetchToken, addNewPlayer, resetScore } from '../redux/actions';
+import logoBlue from '../assets/logoBlue.svg';
 
 class Login extends Component {
   constructor() {
@@ -39,50 +40,53 @@ class Login extends Component {
   render() {
     const { name, email, isButtonDisabled } = this.state;
     return (
-      <form className="form">
-        <label htmlFor="name">
-          <input
-            placeholder="Name"
-            className="input-login"
-            type="text"
-            data-testid="input-player-name"
-            id="name"
-            name="name"
-            value={ name }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="email">
-          <input
-            placeholder="Email"
-            className="input-login"
-            type="text"
-            data-testid="input-gravatar-email"
-            id="email"
-            name="email"
-            value={ email }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <button
-          className="btn-play"
-          data-testid="btn-play"
-          type="button"
-          disabled={ isButtonDisabled }
-          onClick={ this.handleClick }
-        >
-          Play
-        </button>
-        <Link to="/configuracoes">
+      <main className="main-login">
+        <img className="logo" src={ logoBlue } alt="logo" />
+        <form className="form">
+          <label htmlFor="name">
+            <input
+              placeholder="Name"
+              className="input-login"
+              type="text"
+              data-testid="input-player-name"
+              id="name"
+              name="name"
+              value={ name }
+              onChange={ this.handleChange }
+            />
+          </label>
+          <label htmlFor="email">
+            <input
+              placeholder="Email"
+              className="input-login"
+              type="text"
+              data-testid="input-gravatar-email"
+              id="email"
+              name="email"
+              value={ email }
+              onChange={ this.handleChange }
+            />
+          </label>
           <button
-            className="btn-config"
+            className="btn-play"
+            data-testid="btn-play"
             type="button"
-            data-testid="btn-settings"
+            disabled={ isButtonDisabled }
+            onClick={ this.handleClick }
           >
-            Configurações
+            Play
           </button>
-        </Link>
-      </form>
+          <Link to="/configuracoes">
+            <button
+              className="btn-config"
+              type="button"
+              data-testid="btn-settings"
+            >
+              Configurações
+            </button>
+          </Link>
+        </form>
+      </main>
     );
   }
 }

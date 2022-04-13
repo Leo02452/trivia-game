@@ -22,14 +22,15 @@ class Header extends Component {
     const { name, score } = this.props;
     const { url } = this.state;
     return (
-      <header>
+      <header className="header-quiz">
         <img
           data-testid="header-profile-picture"
+          className="header-profile"
           src={ url }
           alt="Foto de Perfil"
         />
         <p data-testid="header-player-name">{name}</p>
-        <p data-testid="header-score">{score}</p>
+        <p data-testid="header-score">{`⭐ Score: ${score}`}</p>
       </header>
     );
   }

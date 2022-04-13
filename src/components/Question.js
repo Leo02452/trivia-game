@@ -5,6 +5,7 @@ import { fetchQuestions, scoreAction } from '../redux/actions';
 import Loading from './Loading';
 import gravatarAPI from '../services/gravatarAPI';
 import './Question.css';
+import timerImg from '../assets/timerImg.svg';
 
 class Question extends Component {
   constructor() {
@@ -185,8 +186,7 @@ class Question extends Component {
   }
 
   render() {
-    const {
-      questions,
+    const { questions,
       index,
       loading,
       timer,
@@ -194,28 +194,46 @@ class Question extends Component {
     } = this.state;
 
     return (
-      <div>
-        { loading
-          ? <Loading />
-          : (
-            <>
-              <p data-testid="question-category">{questions[index].category}</p>
-              <p data-testid="question-text">{questions[index].question}</p>
-              <div data-testid="answer-options">
-                { this.renderAlternatives() }
-              </div>
-              <p>{ timer }</p>
-            </>
-          ) }
-        {isClicked && (
-          <button
-            type="button"
-            data-testid="btn-next"
-            onClick={ this.handleNextButton }
-          >
-            Next
-          </button>
-        )}
+      <div className="quiz-container">
+        <div className="questions-container">
+          { loading
+            ? <Loading />
+            : (
+              <>
+                <p
+                  className="category"
+                  data-testid="question-category"
+                >
+                  {questions[index].category}
+                </p>
+                <p
+                  className="question"
+                  data-testid="question-text"
+                >
+                  {questions[index].question}
+                </p>
+                <div className="alternatives" data-testid="answer-options">
+                  { this.renderAlternatives() }
+                </div>
+                <div>
+                  <img className="timer-img" src={ timerImg } alt="timer" />
+                  <p>{ timer }</p>
+                </div>
+              </>
+            ) }
+          {isClicked && (
+            <div className="div-btn-next">
+              <button
+                type="button"
+                className="btn-next"
+                data-testid="btn-next"
+                onClick={ this.handleNextButton }
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import './Feedback.css';
 
 class Feedback extends Component {
   render() {
@@ -11,29 +12,33 @@ class Feedback extends Component {
     return (
       <div>
         <Header />
-        <main>
-          <h1
-            data-testid="feedback-text"
-          >
-            {assertions >= auxNumber ? 'Well Done!' : 'Could be better...'}
-          </h1>
-          <p data-testid="feedback-total-score">{score}</p>
-          <p data-testid="feedback-total-question">{assertions}</p>
-          <section>
+        <main className="main-feedback">
+          <div className="feedback-container">
+            <h1
+              data-testid="feedback-text"
+            >
+              {assertions >= auxNumber ? 'Well Done! 😀' : 'Could be better... 😓'}
+            </h1>
+            <p data-testid="feedback-total-score">{`⭐ Score: ${score}`}</p>
+            <p data-testid="feedback-total-question">{`✅ Corrects: ${assertions}`}</p>
+          </div>
+          <section className="btn-container">
             <Link to="/">
               <button
                 type="button"
+                className="btn-feedback"
                 data-testid="btn-play-again"
               >
-                Play Again
+                🎮 Play Again
               </button>
             </Link>
             <Link to="/ranking">
               <button
                 type="button"
+                className="btn-feedback"
                 data-testid="btn-ranking"
               >
-                Ranking
+                🏆 Ranking
               </button>
             </Link>
           </section>
