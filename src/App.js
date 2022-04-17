@@ -6,6 +6,7 @@ import Quiz from './pages/Quiz';
 import Configuracoes from './pages/Configuracoes';
 import Ranking from './pages/Ranking';
 import Feedback from './pages/Feedback';
+import './mediaQueries.css';
 
 class App extends Component {
   render() {
