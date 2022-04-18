@@ -6,10 +6,8 @@
   flex-direction: column;
   color: white;
   margin-top: 50px;
-  /* background-color:var(--purple-white); */
   justify-content: space-around;
   text-align: center;
-  /* font-family: 'Courier New', Courier, monospace; */
   font-family: 'Ubuntu', sans-serif;
 } 
 
