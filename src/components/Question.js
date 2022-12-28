@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import he from 'he';
 import { fetchQuestions, scoreAction } from '../redux/actions';
 import Loading from './Loading';
 import gravatarAPI from '../services/gravatarAPI';
 import './Question.css';
 import timerImg from '../assets/timerImg.svg';
-import he from 'he';
+import { shuffleAlternatives, shuffleArray } from '../helpers/shuffleFunctions';
 
 class Question extends Component {
   constructor() {
@@ -51,32 +52,13 @@ class Question extends Component {
     const { propsQuestions } = this.props;
     this.setState({ questions: propsQuestions.results, loading: false }, () => {
       const { questions } = this.state;
-      this.shuffleAlternatives(questions[index]);
+      this.setAlternatives(questions[index]);
     });
   }
 
-  // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
-  shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  shuffleAlternatives = (object) => {
-    let alternatives = object.incorrect_answers.map((answer) => ({
-      answer,
-      isCorrectAnswer: false,
-      difficulty: object.difficulty,
-    }));
-
-    alternatives = [...alternatives, {
-      answer: object.correct_answer,
-      isCorrectAnswer: true,
-      difficulty: object.difficulty }];
-
-    const shuffledArray = this.shuffleArray(alternatives);
+  setAlternatives = (object) => {
+    const alternatives = shuffleAlternatives(object);
+    const shuffledArray = shuffleArray(alternatives);
     this.setState({ shuffledAlternatives: shuffledArray });
   }
 
@@ -160,7 +142,7 @@ class Question extends Component {
   handleNextQuestion = () => {
     const { index, questions } = this.state;
     this.handleTimer();
-    this.shuffleAlternatives(questions[index]);
+    this.setAlternatives(questions[index]);
   }
 
   renderAlternatives = () => {

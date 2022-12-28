@@ -29,22 +29,24 @@ class Feedback extends Component {
           </div>
           <section className="btn-container">
             <Link to="/">
-              <button
-                type="button"
+              <span
+                role="img"
                 className="btn-feedback"
                 data-testid="btn-play-again"
+                aria-label="controller"
               >
                 🎮 Play Again
-              </button>
+              </span>
             </Link>
             <Link to="/ranking">
-              <button
-                type="button"
+              <span
+                role="img"
                 className="btn-feedback"
                 data-testid="btn-ranking"
+                aria-label="trophy"
               >
                 🏆 Ranking
-              </button>
+              </span>
             </Link>
           </section>
         </main>
