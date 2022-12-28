@@ -1,52 +1,65 @@
 .main-feedback {
-  width: 100%;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
   color: white;
-  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  font-family: Ubuntu , sans-serif;
   justify-content: space-around;
+  margin-top: 50px;
   text-align: center;
-  font-family: 'Ubuntu', sans-serif;
-} 
+  width: 100%;
+}
 
 .feedback-container {
-  width: 100%;
-  height: 60vh;
-  margin-bottom: 35px;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  height: 60vh;
   justify-content: space-around;
+  margin-bottom: 35px;
+  width: 100%;
 }
 
 .btn-container {
-  width: 30%;
   align-items: center;
   display: flex;
   justify-content: space-around;
+  width: 30%;
 }
 
 
 .btn-feedback {
-  border: none;
-  color: #fff;
   background-image: linear-gradient(30deg, #0400ff, #4ce3f7);
-  border-radius: 20px;
   background-size: 100% auto;
+  border: none;
+  border-radius: 20px;
+  color: white;
   font-family: inherit;
   font-size: 17px;
   padding: 0.6em 1.5em;
- }
- 
- .btn-feedback:hover {
+}
+
+.btn-feedback:hover {
+  animation: pulse512 1.5s infinite;
   background-position: right center;
   background-size: 200% auto;
-  -webkit-animation: pulse 2s infinite;
-  animation: pulse512 1.5s infinite;
- }
+}
 
- .img-feedback {
-   width: 20%;
- }
+.img-feedback {
+  width: 20%;
+}
+
+@keyframes pulse512 {
+
+  0% {
+    box-shadow: 0 0 0 0 #05bada66;
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+  }
+}

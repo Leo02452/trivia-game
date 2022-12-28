@@ -1,33 +1,32 @@
 .CorrectAns {
-  border: 4px solid rgb(6, 240, 15);
+  border: 3px solid rgb(6, 240, 15);
 }
 
 .IncorrectAns {
   background-color: pink;
-  border: 4px solid red;
+  border: 3px solid red;
 }
 
 .quiz-container {
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   flex-direction: column;
-  width: 100%;
   height: 70vh;
+  justify-content: center;
+  width: 100%;
 }
 
 .questions-container {
+  background-color: #574ae2;
+  border-radius: 5%;
   color: #f5e3e0;
   display: flex;
-  border-radius: 5%;
-  text-align: center;
-  width: 750px;
+  flex-direction: column;
+  font-family: Ubuntu , sans-serif;
   height: 400px;
   justify-content: space-around;
-  flex-direction: column;
-  background-color: #574ae2;
-  /* font-family: 'Poppins', sans-serif; */
-  font-family: 'Ubuntu', sans-serif;
+  text-align: center;
+  width: 750px;
 }
 
 .category {
@@ -35,22 +34,21 @@
 }
 
 .alternatives {
-  width: 100%;
-  margin-right: 10px;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin-right: 10px;
+  width: 100%;
 }
 
 .alternatives > button {
-  width: 50%;
-  margin-bottom: 5px;
-  padding: 2px;
-  color: #090909;
-  padding: 0.7em 1.7em;
-  border-radius: 0.5em;
   background: #e8e8e8;
+  border-radius: 0.5em;
+  color: #090909;
+  margin-bottom: 5px;
+  padding: 0.7em 1.7em;
+  width: 50%;
 }
 
 .div-btn-next {
@@ -59,18 +57,17 @@
 }
 
 .btn-next {
-  width: 60%;
-  height: 40px;
-  border-radius: 3px;
-  font-size: 20px;
   background-color: #2ecc71;
   border: none;
   border-bottom: 5px solid #27ae60;
-  text-shadow: 0px -2px #27ae60;
-  -webkit-transition: all 0.1s;
+  border-radius: 3px;
+  font-size: 20px;
+  height: 40px;
+  text-shadow: 0 -2px #27ae60;
   transition: all 0.1s;
- }
- 
+  width: 60%;
+}
+
 .timer-img {
   width: 20px;
 }
